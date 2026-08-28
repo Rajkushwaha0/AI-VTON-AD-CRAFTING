@@ -74,3 +74,9 @@ For the initial v1 flow, our focus is on establishing the core "happy path" user
    - **Video Generation (`generate_video.py`)**: Implement a simplified pipeline that stitches the selected image into a basic animated 9:16 video file using standard transitions.
    
 4. **Integration**: End-to-end local deployment combining all three services and ensuring robust job state tracking (`PENDING` -> `PROCESSING` -> `COMPLETED`).
+
+---
+
+## 6. Detailed AI Pipeline HLD & LLD Reference
+For the comprehensive technical specification covering OpenCV geometry algorithms, 3-tier forensic QC inspection (Laplacian variance, Face QA, Scene QA), self-healing loops, and Kling Omni video generation, refer to:
+- [AI Pipeline High-Level & Low-Level Design (HLD & LLD)](file:///Users/flixstock/Desktop/adcraft%20/docs/AI_PIPELINE_HLD_LLD.md)
