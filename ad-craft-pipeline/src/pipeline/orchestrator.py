@@ -32,7 +32,8 @@ class PipelineOrchestrator:
         duration: int = 10,
         merge_video: bool = True,
         merge_video_idea: str = "smooth",
-        user_prompt: Optional[str] = None
+        user_prompt: Optional[str] = None,
+        qc_version: str = "v1"
     ) -> Dict[str, Any]:
         norm_aspect = normalize_aspect_ratio(aspect_ratio, default="9:16")
         
@@ -41,7 +42,7 @@ class PipelineOrchestrator:
             aspect_ratio=norm_aspect
         )
         context.log("=== Starting Ad Craft Multi-Garment AI Video Pipeline ===")
-        context.log(f"Run ID: {context.run_id} | Target Aspect Ratio: {norm_aspect} | Duration: {duration}s | Merge: {merge_video} ({merge_video_idea})")
+        context.log(f"Run ID: {context.run_id} | Target Aspect Ratio: {norm_aspect} | Duration: {duration}s | Merge: {merge_video} ({merge_video_idea}) | QC Engine: {qc_version.upper()}")
         
         try:
             # Step 1: Ingestion (Primary & Optional Secondary Product)
@@ -83,7 +84,7 @@ class PipelineOrchestrator:
             # Step 3: VTON Image Generation (Dual Garments + Auto-Accessories + QC)
             context.log(f"Proceeding to VTON image generation for style: '{selected_single_style[0]}'...")
             assets = self.image_gen.generate_style_images(
-                context, product_data, selected_single_style, max_parallel=1, aspect_ratio=norm_aspect
+                context, product_data, selected_single_style, max_parallel=1, aspect_ratio=norm_aspect, qc_version=qc_version
             )
             
             if target_stage == "image":

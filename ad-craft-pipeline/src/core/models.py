@@ -2,15 +2,24 @@ import os
 import uuid
 import json
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from typing import List, Optional, Dict, Any
+
+KOLKATA_TZ = timezone(timedelta(hours=5, minutes=30))
+
+def generate_run_id() -> str:
+    """Generates run ID prefixed with current Kolkata date and time (UTC+5:30): YYYYMMDD_HHMMSS_IST_<short_id>."""
+    now_kolkata = datetime.now(KOLKATA_TZ)
+    timestamp_prefix = now_kolkata.strftime("%Y%m%d_%H%M%S_IST")
+    short_uid = uuid.uuid4().hex[:6]
+    return f"{timestamp_prefix}_{short_uid}"
 
 
 class PipelineContext:
     """Manages the state and local storage for a single pipeline run."""
     
     def __init__(self, base_dir: str = "runs", run_id: Optional[str] = None, aspect_ratio: str = "9:16"):
-        self.run_id = run_id or uuid.uuid4().hex[:12]
+        self.run_id = run_id or generate_run_id()
         self.base_dir = base_dir
         self.aspect_ratio = aspect_ratio
         self.run_dir = os.path.join(base_dir, self.run_id)
@@ -32,7 +41,7 @@ class PipelineContext:
         os.makedirs(self.videos_dir, exist_ok=True)
         
     def log(self, message: str):
-        timestamp = datetime.now().isoformat()
+        timestamp = datetime.now(KOLKATA_TZ).strftime("%Y-%m-%d %H:%M:%S IST")
         log_line = f"[{timestamp}] {message}\n"
         print(log_line.strip())
         with open(self.log_file, "a", encoding="utf-8") as f:

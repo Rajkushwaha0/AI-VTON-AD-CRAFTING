@@ -36,7 +36,8 @@ class IImageGenerator(ABC):
         product_data: ProductData, 
         styles: List[str], 
         max_parallel: int = 4,
-        aspect_ratio: str = "9:16"
+        aspect_ratio: str = "9:16",
+        qc_version: str = "v1"
     ) -> List[GeneratedAsset]:
         pass
 

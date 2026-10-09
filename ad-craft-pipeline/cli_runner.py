@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import re
 import argparse
 
 # Automatically load environment variables from .env
@@ -34,6 +35,7 @@ def main():
     parser.add_argument("--merge-video", action="store_true", default=None, help="Merge shots into final video via FFmpeg")
     parser.add_argument("--merge-video-idea", type=str, default=None, choices=["smooth", "fast_paced"], help="Merge transition style ('smooth' or 'fast_paced')")
     parser.add_argument("--user-prompt", type=str, default=None, help="Custom camera / movement prompt override")
+    parser.add_argument("--qc-version", type=str, default="v1", choices=["v1", "v2"], help="Quality control engine version ('v1' legacy or 'v2' next-gen 4-tier)")
     args = parser.parse_args()
     
     url = args.url
@@ -46,10 +48,17 @@ def main():
     merge_video = True
     merge_video_idea = "smooth"
     user_prompt = args.user_prompt
+    qc_version = args.qc_version
     
     if not url and os.path.exists(args.demo):
         with open(args.demo, "r", encoding="utf-8") as f:
             payload = json.load(f)
+
+        # Support runs dictionary with active pointer
+        if isinstance(payload, dict) and "active" in payload and "runs" in payload:
+            active_name = payload["active"]
+            payload = payload["runs"].get(active_name, payload)
+
         url = payload.get("product_url")
         secondary_url = payload.get("secondary_product_url", secondary_url)
         details = payload.get("product_details")
@@ -61,11 +70,14 @@ def main():
             merge_video = bool(payload.get("mergeVideo"))
         merge_video_idea = payload.get("mergeVideoIdea", merge_video_idea)
         user_prompt = payload.get("user_prompt", user_prompt)
+        qc_version = payload.get("qc_version", payload.get("qcVersion", qc_version))
 
     if args.merge_video is not None:
         merge_video = args.merge_video
     if args.merge_video_idea is not None:
         merge_video_idea = args.merge_video_idea
+    if args.qc_version:
+        qc_version = args.qc_version
 
     print("==================================================")
     print("      AdCraft Next-Gen AI Video Pipeline          ")
@@ -76,12 +88,13 @@ def main():
     print(f"• Target Duration: {duration}s ({2 if duration==10 else 3} parallel shots of 5s each)")
     print(f"• Merge Video: {merge_video} (Idea: '{merge_video_idea}')")
     print(f"• Target Stage: {args.stage}")
+    print(f"• QC Engine Version: {qc_version.upper()}")
     print("--------------------------------------------------")
     
     # Dependency Injection
     ingestion = ScraperIngestionService()
     analyzer = GeminiStyleAnalyzer()
-    image_gen = ParallelImageGenerator()
+    image_gen = ParallelImageGenerator(qc_version=qc_version)
     video_gen = ParallelVideoGenerator()
     
     orchestrator = PipelineOrchestrator(
@@ -102,7 +115,8 @@ def main():
         duration=duration,
         merge_video=merge_video,
         merge_video_idea=merge_video_idea,
-        user_prompt=user_prompt
+        user_prompt=user_prompt,
+        qc_version=qc_version
     )
     
     print(f"\nPipeline Result: {result}")

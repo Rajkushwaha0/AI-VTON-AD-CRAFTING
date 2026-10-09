@@ -1,12 +1,29 @@
 {
-  "product_url": "https://www.myntra.com/tops/fable+street/fable-street-livin-v-neck-regular-top/14785506/buy",
-  "secondary_product_url": "https://www.myntra.com/jeans/glitchez/glitchez-women-baggy-pure-cotton-heavy-fade-wide-leg-jeans/31363104/buy",
-  "aspect_ratio": "9:16",
-  "styles": [
-    "Contemporary Chic Studio"
-  ],
-  "duration": 10,
-  "mergeVideo": true,
-  "mergeVideoIdea": "smooth",
-  "user_prompt": "Cinematic slow tracking shot with elegant model movement with confidence"
+  "active": "oliveBraAndBlueJeans",
+  "runs": {
+    "blackTopAndBlueJeans": {
+      "product_url": "https://www.myntra.com/tops/fable+street/fable-street-livin-v-neck-regular-top/14785506/buy",
+      "secondary_product_url": "https://www.myntra.com/jeans/glitchez/glitchez-women-baggy-pure-cotton-heavy-fade-wide-leg-jeans/31363104/buy",
+      "aspect_ratio": "9:16",
+      "styles": [
+        "Contemporary Chic Studio"
+      ],
+      "duration": 10,
+      "mergeVideo": true,
+      "mergeVideoIdea": "smooth",
+      "user_prompt": "Cinematic slow tracking shot with elegant model movement with confidence"
+    },
+    "oliveBraAndBlueJeans": {
+      "product_url": "https://www.myntra.com/bra/dressberry/dressberry-full-coverage-lightly-padded-bra-/41704061/buy",
+      "secondary_product_url": "https://www.myntra.com/jeans/glitchez/glitchez-women-baggy-pure-cotton-heavy-fade-wide-leg-jeans/31363104/buy",
+      "aspect_ratio": "9:16",
+      "duration": 10,
+      "styles": [
+        "in seductive pose, with dime light and soft bedroom background with focus on primary garment and side look"
+      ],
+      "mergeVideo": true,
+      "mergeVideoIdea": "smooth",
+      "user_prompt": "Cinematic slow tracking shot with elegant model movement with confidence"
+    }
+  }
 }
